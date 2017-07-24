@@ -1,24 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using Logging;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Reporting
 {
-    public class TradeVolumeCalculator
+    internal class TradeVolumeCalculator
     {
         public static IDictionary<string, double> CalculateAggregateVolumes(IEnumerable<ITrade> trades)
         {
             IDictionary<int, string> mappings = PeriodTimeTradeMappings.GetMappings();
             IDictionary<int, double> periodVolumes = mappings.ToDictionary(kvp => kvp.Key, kvp => 0.0);
+            IDictionary<string, double> result = new Dictionary<string, double>();
 
-            foreach (var trade in trades)
+            try
             {
-                foreach (var volumePerPeriod in trade.VolumePerPeriod)
+                foreach (var trade in trades)
                 {
-                    periodVolumes[volumePerPeriod.Key] += volumePerPeriod.Value;
+                    foreach (var volumePerPeriod in trade.VolumePerPeriod)
+                    {
+                        periodVolumes[volumePerPeriod.Key] += volumePerPeriod.Value;
+                    }
                 }
+
+                result = periodVolumes.ToDictionary(kvp => mappings[kvp.Key], kvp => kvp.Value);
+            }
+            catch (Exception ex)
+            {
+                ServiceLogger.LogEvent(ServiceEvent.VolumeCalculationFailed, new ConsoleLogStrategy(), ex.Message);
             }
 
-            return periodVolumes.ToDictionary(kvp => mappings[kvp.Key], kvp => kvp.Value);
+            return result;
         }
     }
 }

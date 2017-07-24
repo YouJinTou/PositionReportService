@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Reporting
 {
     public class ReportCreator
     {
-        public static void CreateTradeVolumeReport(IEnumerable<ITrade> trades, string savePath)
+        public static async Task CreateTradeVolumeReportAsync(DateTime date, string savePath, IPowerService service, TradeType tradeType)
         {
+            TradesFetcher fetcher = new TradesFetcher(service, tradeType);
+            IEnumerable<ITrade> trades = await fetcher.GetTradesAsync(date);
             StringBuilder csv = new StringBuilder();
             IDictionary<string, double> aggregateVolumes = TradeVolumeCalculator.CalculateAggregateVolumes(trades);
 
@@ -19,23 +23,9 @@ namespace Reporting
                 csv.AppendLine(string.Format("{0},{1}", volumePerPeriod.Key, Math.Round(volumePerPeriod.Value, 0)));
             }
 
-            if (Directory.Exists(savePath))
-            {
-                string fullpath = Path.Combine(savePath, GetReportName());
+            string fullpath = Path.Combine(savePath, GetReportName());
 
-                File.WriteAllText(fullpath, csv.ToString());
-            }
-            else
-            {
-                try
-                {
-                    Directory.CreateDirectory(savePath);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
+            File.WriteAllText(fullpath, csv.ToString());
         }
 
         private static string GetReportName()
@@ -44,14 +34,14 @@ namespace Reporting
 
             switch (Utils.GetTradeType())
             {
-                case Trade.PowerTrade:
+                case TradeType.PowerTrade:
                     prefix = "PowerPosition_";
 
                     break;
                 default:
                     break;
             }
-            
+
             DateTime gmtTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
             string datetTimeComponent = gmtTime.ToString("yyyyMMdd_HHmm");
             string extension = ".csv";

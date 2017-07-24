@@ -5,7 +5,7 @@ using System.Linq;
     
 namespace Reporting
 {
-    public class PowerTradeAdapter : ITrade
+    internal class PowerTradeAdapter : ITrade
     {
         private PowerTrade powerTrade;
 

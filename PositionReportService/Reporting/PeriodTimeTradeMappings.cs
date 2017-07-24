@@ -2,7 +2,7 @@
 
 namespace Reporting
 {
-    public class PeriodTimeTradeMappings
+    internal class PeriodTimeTradeMappings
     {
         private static readonly IDictionary<int, string> PowerTradeMappings = new Dictionary<int, string>
         {
@@ -36,7 +36,7 @@ namespace Reporting
         {
             switch (Utils.GetTradeType())
             {
-                case Trade.PowerTrade:
+                case TradeType.PowerTrade:
                     return PowerTradeMappings;
                 default:
                     return PowerTradeMappings;

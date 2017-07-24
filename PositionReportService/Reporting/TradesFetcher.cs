@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Services;
@@ -6,14 +7,14 @@ using Services;
 namespace Reporting
 {
     /// <summary>
-    /// Exposes methods to get trade data for specific date.
+    /// Exposes methods to get trade data for a specific date.
     /// </summary>
-    public class TradesFetcher
+    internal class TradesFetcher
     {
         private IPowerService service;
-        private Trade trade;
+        private TradeType trade;
 
-        public TradesFetcher(IPowerService service, Trade trade)
+        public TradesFetcher(IPowerService service, TradeType trade)
         {
             this.service = service;
             this.trade = trade;
@@ -36,17 +37,17 @@ namespace Reporting
             {
                 try
                 {
-                    trades = await GetAdaptedTradesAsync(date);
+                    trades = await this.GetAdaptedTradesAsync(date);
                 }
-                catch (PowerServiceException pse)
+                catch (PowerServiceException)
                 {
                     failCounter++;
 
-                    // LOG
+                    ServiceLogger.LogEvent(ServiceEvent.ApiCallFailed, new ConsoleLogStrategy());
 
                     if (failCounter >= maxFailuresAllowed)
                     {
-                        // SEND MAIL
+                        ServiceLogger.LogEvent(ServiceEvent.MaxApiCallsExceeded, new ConsoleLogStrategy());
 
                         failCounter = 0;
                     }
@@ -55,7 +56,7 @@ namespace Reporting
                 }
                 catch (ArgumentException ae)
                 {
-                    // SEND MAIL INVALID TRADE
+                    ServiceLogger.LogEvent(ServiceEvent.InvalidTradeTypeReceived, new ConsoleLogStrategy(), ae.Message);
                 }
             }
 
@@ -66,7 +67,7 @@ namespace Reporting
         {
             switch (this.trade)
             {
-                case Trade.PowerTrade:
+                case TradeType.PowerTrade:
                     IEnumerable<PowerTrade> powerTrades = await this.service.GetTradesAsync(date);
                     ICollection<PowerTradeAdapter> adaptedTrades = new List<PowerTradeAdapter>();
 

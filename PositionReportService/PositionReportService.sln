@@ -1,13 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Windows Desktop
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "Reporting\Reporting.csproj", "{0464C913-A45C-4605-8E9C-B35F612FB86E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportingTest", "ReportingTest\ReportingTest.csproj", "{75AAC838-BDB7-4A75-BDB7-BDB55EA1F8BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceRunner", "ServiceRunner\ServiceRunner.csproj", "{349343E1-AD88-490B-857E-37FF97A6818F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsService", "WindowsService\WindowsService.csproj", "{3CB538C0-2071-40E1-8B91-4DF002745472}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalAssemblies", "ExternalAssemblies", "{4F23383A-E9E4-4ED7-8D96-51370B52AA60}"
+	ProjectSection(SolutionItems) = preProject
+		Reporting\bin\PowerService.dll = Reporting\bin\PowerService.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleService", "ConsoleService\ConsoleService.csproj", "{F93B75A8-9780-40D0-9A9E-21E42AD9DB92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{97C10C16-AF5B-41E8-AC75-5775E3FA1284}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configuration\Configuration.csproj", "{C12EBFC5-DDC4-4465-8940-2F5AB39F8D34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +34,22 @@ Global
 		{75AAC838-BDB7-4A75-BDB7-BDB55EA1F8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75AAC838-BDB7-4A75-BDB7-BDB55EA1F8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75AAC838-BDB7-4A75-BDB7-BDB55EA1F8BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{349343E1-AD88-490B-857E-37FF97A6818F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{349343E1-AD88-490B-857E-37FF97A6818F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{349343E1-AD88-490B-857E-37FF97A6818F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{349343E1-AD88-490B-857E-37FF97A6818F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CB538C0-2071-40E1-8B91-4DF002745472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CB538C0-2071-40E1-8B91-4DF002745472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CB538C0-2071-40E1-8B91-4DF002745472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CB538C0-2071-40E1-8B91-4DF002745472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F93B75A8-9780-40D0-9A9E-21E42AD9DB92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F93B75A8-9780-40D0-9A9E-21E42AD9DB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F93B75A8-9780-40D0-9A9E-21E42AD9DB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F93B75A8-9780-40D0-9A9E-21E42AD9DB92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C10C16-AF5B-41E8-AC75-5775E3FA1284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C10C16-AF5B-41E8-AC75-5775E3FA1284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C10C16-AF5B-41E8-AC75-5775E3FA1284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C10C16-AF5B-41E8-AC75-5775E3FA1284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12EBFC5-DDC4-4465-8940-2F5AB39F8D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12EBFC5-DDC4-4465-8940-2F5AB39F8D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12EBFC5-DDC4-4465-8940-2F5AB39F8D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12EBFC5-DDC4-4465-8940-2F5AB39F8D34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

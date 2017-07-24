@@ -4,9 +4,9 @@ namespace Reporting
 {
     internal static class Utils
     {
-        public static Trade GetTradeType()
+        public static TradeType GetTradeType()
         {
-            Trade trade = (Trade)Enum.Parse(typeof(Trade), Environment.GetEnvironmentVariable("Trade"));
+            TradeType trade = (TradeType)Enum.Parse(typeof(TradeType), Environment.GetEnvironmentVariable("Trade"));
 
             return trade;
         }

@@ -1,9 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reporting;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace ReportingTest
 {
@@ -31,7 +32,8 @@ namespace ReportingTest
             string reportName = "PowerPosition_" + gmtTime.ToString("yyyyMMdd_HHmm") + ".csv";
             string testExePath = AppDomain.CurrentDomain.BaseDirectory;
             string reportPath = Path.Combine(testExePath, reportName);
-            ReportCreator.CreateTradeVolumeReport(this.DummyTrades, testExePath);
+                
+            Task.Run(() => ReportCreator.CreateTradeVolumeReportAsync(DateTime.Now, testExePath, new PowerService(), TradeType.PowerTrade));
         }
     }
 }

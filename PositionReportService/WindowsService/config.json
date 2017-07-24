@@ -1,0 +1,6 @@
+{
+  "TradeReportsPath": "C:\\Users\\dandr\\Desktop\\TradeReports",
+  "GenerationIntervalInMinutes": "-1",
+  "TradeType": "PowerTrade",
+  "ServiceType": "PowerService"
+}
