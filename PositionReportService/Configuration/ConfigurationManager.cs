@@ -13,11 +13,6 @@ namespace Configuration
     /// </summary>
     public static class ConfigurationManager
     {
-        static ConfigurationManager()
-        {
-
-        }
-
         private static ConfigurationSettings appSettings;
 
         /// <summary>
