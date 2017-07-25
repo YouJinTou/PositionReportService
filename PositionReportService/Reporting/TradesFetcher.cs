@@ -13,16 +13,18 @@ namespace Reporting
     {
         private IPowerService service;
         private TradeType trade;
+        private IServiceLogger logger;
 
         /// <summary>
         /// Instantiate to be able to get the trades required.
         /// </summary>
         /// <param name="service">The type of API service.</param>
         /// <param name="trade">The type of trade.</param>
-        public TradesFetcher(IPowerService service, TradeType trade)
+        public TradesFetcher(IPowerService service, TradeType trade, IServiceLogger logger)
         {
             this.service = service;
             this.trade = trade;
+            this.logger = logger;
 
             Environment.SetEnvironmentVariable("Trade", trade.ToString());
         }
@@ -49,11 +51,11 @@ namespace Reporting
                 {
                     failCounter++;
 
-                    ServiceLogger.LogEvent(ServiceEvent.ApiCallFailed, new WindowsEventLogStrategy());
+                    this.logger.LogEvent(ServiceEvent.ApiCallFailed);
 
                     if (failCounter >= maxFailuresAllowed)
                     {
-                        ServiceLogger.LogEvent(ServiceEvent.MaxApiCallsExceeded, new WindowsEventLogStrategy());
+                        this.logger.LogEvent(ServiceEvent.MaxApiCallsExceeded);
 
                         failCounter = 0;
                     }
@@ -62,7 +64,7 @@ namespace Reporting
                 }
                 catch (ArgumentException ae)
                 {
-                    ServiceLogger.LogEvent(ServiceEvent.InvalidTradeTypeReceived, new WindowsEventLogStrategy(), ae.Message);
+                    this.logger.LogEvent(ServiceEvent.InvalidTradeTypeReceived, ae.Message);
                 }
             }
 

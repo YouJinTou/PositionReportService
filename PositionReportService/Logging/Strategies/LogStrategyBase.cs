@@ -5,7 +5,7 @@
     /// <para>ConsoleLogStrategy</para>
     /// <para>WindowsEventLogStrategy</para>
     /// </summary>
-    public abstract class LogStrategyBase
+    internal abstract class LogStrategyBase
     {
         protected ServiceEvent serviceEvent;
         protected string message;

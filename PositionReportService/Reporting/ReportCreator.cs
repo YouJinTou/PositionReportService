@@ -1,4 +1,5 @@
-﻿using Services;
+﻿using Logging;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,12 +21,13 @@ namespace Reporting
         /// <param name="service">The type of API service to use.</param>
         /// <param name="tradeType">The type of trade.</param>
         /// <returns></returns>
-        public static async Task CreateTradeVolumeReportAsync(DateTime date, string savePath, IPowerService service, TradeType tradeType)
+        public static async Task CreateTradeVolumeReportAsync(DateTime date, string savePath, IPowerService service, TradeType tradeType, IServiceLogger logger)
         {
-            TradesFetcher fetcher = new TradesFetcher(service, tradeType);
+            TradesFetcher fetcher = new TradesFetcher(service, tradeType, logger);
             IEnumerable<ITrade> trades = await fetcher.GetTradesAsync(date);
+            TradeVolumeCalculator calculator = new TradeVolumeCalculator(logger);
+            IDictionary<string, double> aggregateVolumes = calculator.CalculateAggregateVolumes(trades);
             StringBuilder csv = new StringBuilder();
-            IDictionary<string, double> aggregateVolumes = TradeVolumeCalculator.CalculateAggregateVolumes(trades);
 
             csv.AppendLine("Local Time,Volume");
 

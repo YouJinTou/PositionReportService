@@ -9,16 +9,18 @@ namespace ConsoleService
     internal class Runner
     {
         private static TimeSpan initialInterval;
+        private static IServiceLogger logger;
 
         static void Main(string[] args)
         {
             initialInterval = ConfigurationManager.GenerationIntervalInMinutes;
+            logger = new ServiceLogger(LogStrategy.Console);
 
-            ServiceLogger.LogEvent(ServiceEvent.ServiceInitialized, new ConsoleLogStrategy(), string.Format("Interval: {0}", initialInterval));
+            logger.LogEvent(ServiceEvent.ServiceInitialized, string.Format("Interval: {0}", initialInterval));
             
             Task.Run(() => CreateReport()).GetAwaiter().GetResult();
 
-            ServiceLogger.LogEvent(ServiceEvent.ServiceStopped, new ConsoleLogStrategy());
+            logger.LogEvent(ServiceEvent.ServiceStopped);
         }
 
         private static async Task CreateReport()
@@ -29,9 +31,10 @@ namespace ConsoleService
                     DateTime.Now, 
                     ConfigurationManager.TradeReportsPath, 
                     ConfigurationManager.Service, 
-                    ConfigurationManager.TradeType);
+                    ConfigurationManager.TradeType,
+                    logger);
 
-                ServiceLogger.LogEvent(ServiceEvent.ReportCreatedSuccessfully, new ConsoleLogStrategy());
+                logger.LogEvent(ServiceEvent.ReportCreatedSuccessfully);
 
                 ConfigurationManager.RefreshAppSettings();
 
@@ -41,13 +44,10 @@ namespace ConsoleService
                 {
                     initialInterval = newInterval;
 
-                    ServiceLogger.LogEvent(
-                        ServiceEvent.GenerationIntervalChanged, 
-                        new ConsoleLogStrategy(), 
-                        string.Format("Interval changed to: {0}", newInterval));
+                    logger.LogEvent(ServiceEvent.GenerationIntervalChanged, string.Format("Interval changed to: {0}", newInterval));
                 }
 
-                ServiceLogger.LogEvent(ServiceEvent.Sleeping, new ConsoleLogStrategy());
+                logger.LogEvent(ServiceEvent.Sleeping);
 
                 await Task.Delay(newInterval);
             }            

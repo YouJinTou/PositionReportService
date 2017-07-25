@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reporting;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,8 @@ namespace Testing
         {
             Environment.SetEnvironmentVariable("Trade", "PowerTrade");
 
-            var aggregateVolumes = TradeVolumeCalculator.CalculateAggregateVolumes(this.DummyTrades);
+            var calculator = new TradeVolumeCalculator(new ServiceLogger(LogStrategy.Console));
+            var aggregateVolumes = calculator.CalculateAggregateVolumes(this.DummyTrades);
             var mappings = PeriodTimeMappings.GetMapping();
 
             for (int period = 1; period <= 24; period++)

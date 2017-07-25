@@ -5,7 +5,7 @@ namespace Logging
     /// <summary>
     /// Allows writing report events to the console.
     /// </summary>
-    public class ConsoleLogStrategy : LogStrategyBase, ILogStrategy
+    internal class ConsoleLogStrategy : LogStrategyBase, ILogStrategy
     {
         /// <summary>
         /// Logs a given event to the console.

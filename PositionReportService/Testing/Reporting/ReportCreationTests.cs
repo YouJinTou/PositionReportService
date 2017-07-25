@@ -1,4 +1,5 @@
 ﻿using Configuration;
+using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reporting;
 using Services;
@@ -34,7 +35,7 @@ namespace Testing
             string testExePath = ConfigurationManager.TradeReportsPath;
             string reportPath = Path.Combine(testExePath, reportName);
 
-            await ReportCreator.CreateTradeVolumeReportAsync(DateTime.Now, testExePath, new PowerService(), TradeType.PowerTrade);
+            await ReportCreator.CreateTradeVolumeReportAsync(DateTime.Now, testExePath, new PowerService(), TradeType.PowerTrade, new ServiceLogger(LogStrategy.Console));
 
             if (!File.Exists(reportPath))
             {

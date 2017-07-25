@@ -13,6 +13,11 @@ namespace Configuration
     /// </summary>
     public static class ConfigurationManager
     {
+        static ConfigurationManager()
+        {
+
+        }
+
         private static ConfigurationSettings appSettings;
 
         /// <summary>
@@ -30,7 +35,7 @@ namespace Configuration
                     }
                     catch (Exception ex)
                     {
-                        ServiceLogger.LogEvent(ServiceEvent.ParseFailed, new WindowsEventLogStrategy(), ex.Message);
+                        ServiceLogger.LogEvent(ServiceEvent.ParseFailed, LogStrategy.WindowsEventLog, ex.Message);
                     }
                 }
 
@@ -50,7 +55,7 @@ namespace Configuration
 
                 if (!parsed)
                 {
-                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, new WindowsEventLogStrategy(), "Could not parse interval.");
+                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, LogStrategy.WindowsEventLog, "Could not parse interval.");
                 }
 
                 TimeSpan newInterval = (parsed && intervalInMinutes > 0) ? new TimeSpan(0, intervalInMinutes, 0) : new TimeSpan(0, 60, 0);
@@ -72,7 +77,7 @@ namespace Configuration
 
                 if (!parsed)
                 {
-                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, new WindowsEventLogStrategy(), "Could not parse service type.");
+                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, LogStrategy.WindowsEventLog, "Could not parse service type.");
                 }
 
                 return parsed ? serviceType : ServiceType.PowerService;
@@ -88,11 +93,11 @@ namespace Configuration
             get
             {
                 TradeType tradeType;
-                bool parsed = Enum.TryParse(AppSettings.ServiceType, out tradeType);
+                bool parsed = Enum.TryParse(AppSettings.TradeType, out tradeType);
 
                 if (!parsed)
                 {
-                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, new WindowsEventLogStrategy(), "Could not parse trade type.");
+                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, LogStrategy.WindowsEventLog, "Could not parse trade type.");
                 }
 
                 return parsed ? tradeType : TradeType.PowerTrade;
@@ -112,8 +117,9 @@ namespace Configuration
 
                 if (!parsed)
                 {
-                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, new WindowsEventLogStrategy(), "Could not parse service type.");
+                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, LogStrategy.WindowsEventLog, "Could not parse service type.");
                 }
+
                 serviceType = parsed ? serviceType : ServiceType.PowerService;
 
                 switch (serviceType)
@@ -154,7 +160,7 @@ namespace Configuration
                 }
                 catch (Exception ex)
                 {
-                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, new WindowsEventLogStrategy(), ex.Message);
+                    ServiceLogger.LogEvent(ServiceEvent.ParseFailed, LogStrategy.WindowsEventLog, ex.Message);
 
                     appSettings = new ConfigurationSettings()
                     {

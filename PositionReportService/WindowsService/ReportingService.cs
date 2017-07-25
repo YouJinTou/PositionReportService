@@ -13,10 +13,12 @@ namespace WindowsService
         private CancellationTokenSource cancellationTokenSource;
         private Task createReportTask;
         private TimeSpan initialInterval;
+        private IServiceLogger logger;
 
         public ReportingService()
         {
             this.initialInterval = ConfigurationManager.GenerationIntervalInMinutes;
+            this.logger = new ServiceLogger(LogStrategy.WindowsEventLog);
 
             this.InitializeComponent();
         }
@@ -25,7 +27,7 @@ namespace WindowsService
         {
             //Thread.Sleep(15000); // For attaching purposes
 
-            ServiceLogger.LogEvent(ServiceEvent.ServiceInitialized, new WindowsEventLogStrategy());
+            this.logger.LogEvent(ServiceEvent.ServiceInitialized);
 
             this.cancellationTokenSource = new CancellationTokenSource();
             this.createReportTask = Task.Run(() => this.CreateReport(this.cancellationTokenSource.Token));
@@ -37,7 +39,7 @@ namespace WindowsService
 
             try
             {
-                ServiceLogger.LogEvent(ServiceEvent.WaitingBeforeStop, new WindowsEventLogStrategy());
+                this.logger.LogEvent(ServiceEvent.WaitingBeforeStop);
 
                 this.RequestAdditionalTime(TimeSpan.FromSeconds(60).Milliseconds);
 
@@ -45,10 +47,10 @@ namespace WindowsService
             }
             catch (AggregateException aex)
             {
-                ServiceLogger.LogEvent(ServiceEvent.StopExceptionThrown, new WindowsEventLogStrategy(), aex.Message);
+                this.logger.LogEvent(ServiceEvent.StopExceptionThrown, aex.Message);
             }
 
-            ServiceLogger.LogEvent(ServiceEvent.ServiceStopped, new WindowsEventLogStrategy());
+            this.logger.LogEvent(ServiceEvent.ServiceStopped);
         }
 
         private async Task CreateReport(CancellationToken token)
@@ -59,9 +61,10 @@ namespace WindowsService
                     DateTime.Now,
                     ConfigurationManager.TradeReportsPath,
                     ConfigurationManager.Service,
-                    ConfigurationManager.TradeType);
+                    ConfigurationManager.TradeType,
+                    this.logger);
 
-                ServiceLogger.LogEvent(ServiceEvent.ReportCreatedSuccessfully, new WindowsEventLogStrategy());
+                this.logger.LogEvent(ServiceEvent.ReportCreatedSuccessfully);
 
                 ConfigurationManager.RefreshAppSettings();
 
@@ -69,18 +72,15 @@ namespace WindowsService
 
                 if (this.IntervalChanged(newInterval))
                 {
-                    ServiceLogger.LogEvent(
-                        ServiceEvent.GenerationIntervalChanged,
-                        new WindowsEventLogStrategy(),
-                        string.Format("Interval changed to: {0}", newInterval));
+                    this.logger.LogEvent(ServiceEvent.GenerationIntervalChanged, string.Format("Interval changed to: {0}", newInterval));
                 }
 
-                ServiceLogger.LogEvent(ServiceEvent.Sleeping, new WindowsEventLogStrategy());
+                this.logger.LogEvent(ServiceEvent.Sleeping);
 
                 await Task.Delay(newInterval, token);
             }
 
-            ServiceLogger.LogEvent(ServiceEvent.ServiceStopped, new WindowsEventLogStrategy());
+            this.logger.LogEvent(ServiceEvent.ServiceStopped);
         }
 
         private bool IntervalChanged(TimeSpan newInterval)

@@ -65,6 +65,10 @@
       <Project>{c12ebfc5-ddc4-4465-8940-2f5ab39f8d34}</Project>
       <Name>Configuration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{97c10c16-af5b-41e8-ac75-5775e3fa1284}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reporting\Reporting.csproj">
       <Project>{0464C913-A45C-4605-8E9C-B35F612FB86E}</Project>
       <Name>Reporting</Name>

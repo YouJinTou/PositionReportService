@@ -2,9 +2,9 @@
 
 namespace WindowsService
 {
-    static class Runner
+    public static class Runner
     {
-        static void Main()
+        public static void Main()
         {
             ServiceBase[] services = new ServiceBase[]
             {

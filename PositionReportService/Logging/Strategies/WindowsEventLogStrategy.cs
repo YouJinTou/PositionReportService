@@ -5,7 +5,7 @@ namespace Logging
     /// <summary>
     /// Allows writing report events to the Windows event log under "Trade Reporting Service Event Log".
     /// </summary>
-    public class WindowsEventLogStrategy : LogStrategyBase, ILogStrategy
+    internal class WindowsEventLogStrategy : LogStrategyBase, ILogStrategy
     {
         private const string EventSource = "Trade Reporting Service Event Source";
         private const string EventLogName = "Trade Reporting Service Event Log";
