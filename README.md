@@ -1,6 +1,7 @@
 # Trade Report Service
 The solution can either be run as a console app or Windows service. It includes the following projects:
 - Configuration -- handles read operations from the config.json file;
+- ExternalAssemblies -- a folder to hold external assemblies for easier referencing;
 - ConsoleService -- the application as a console application;
 - Logging -- a logger that employs a different strategy based on what client we use;
 - Reporting -- responsible for calling the API, aggregating the data, and persisting it as a .csv;
