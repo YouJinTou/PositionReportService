@@ -8,4 +8,6 @@ The solution can either be run as a console app or Windows service. It includes 
 - Testing -- a small suite to test the functionality of Configuration and Reporting;
 - WindowsService -- the application is a Windows service. It needs to be installed. To debug, attach to the service from VS.
 
+NuGet packages need to be restored before the solution can be run.
+
 I understand what I've done is probably overkill, but I wanted to push myself here.
