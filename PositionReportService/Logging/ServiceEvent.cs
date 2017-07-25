@@ -5,13 +5,14 @@
         ServiceInitialized = 0,
         ReportCreatedSuccessfully,
         ServiceStopped,
-        StopFailed,
+        StopExceptionThrown,
         GenerationIntervalChanged,
         VolumeCalculationFailed,
         InvalidTradeTypeReceived,
         MaxApiCallsExceeded,
         ApiCallFailed,
         Sleeping,
-        ParseFailed
+        ParseFailed,
+        WaitingBeforeStop
     }
 }

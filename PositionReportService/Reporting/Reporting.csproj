@@ -45,13 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITrade.cs" />
-    <Compile Include="PeriodTimeTradeMappings.cs" />
-    <Compile Include="PowerTradeAdapter.cs" />
+    <Compile Include="Adapters\ITrade.cs" />
+    <Compile Include="Mappings\PeriodTimeMappings.cs" />
+    <Compile Include="Adapters\PowerTradeAdapter.cs" />
     <Compile Include="ReportCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceType.cs" />
-    <Compile Include="TradeType.cs" />
+    <Compile Include="Enums\ServiceType.cs" />
+    <Compile Include="Enums\TradeType.cs" />
     <Compile Include="TradesFetcher.cs" />
     <Compile Include="TradeVolumeCalculator.cs" />
     <Compile Include="Utils.cs" />

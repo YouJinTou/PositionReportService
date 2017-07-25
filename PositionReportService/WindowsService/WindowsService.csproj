@@ -36,6 +36,7 @@
       <HintPath>..\ExternalAssemblies\PowerService.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,6 +52,9 @@
     </Compile>
     <Compile Include="ReportingService.Designer.cs">
       <DependentUpon>ReportingService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportingServiceInstaller.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Runner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

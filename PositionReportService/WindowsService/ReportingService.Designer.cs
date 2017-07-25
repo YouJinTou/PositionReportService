@@ -15,7 +15,7 @@ namespace WindowsService
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing && (this.components != null))
             {
                 this.components.Dispose();
             }
@@ -31,8 +31,8 @@ namespace WindowsService
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.ServiceName = "TradePositionReportService";
+            this.components = new Container();
+            this.ServiceName = "Trade Reporting Service";
         }
 
         #endregion

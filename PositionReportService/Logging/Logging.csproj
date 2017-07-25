@@ -40,14 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleLogStrategy.cs" />
-    <Compile Include="ILogStrategy.cs" />
-    <Compile Include="LogStrategyBase.cs" />
+    <Compile Include="Strategies\ConsoleLogStrategy.cs" />
+    <Compile Include="Strategies\ILogStrategy.cs" />
+    <Compile Include="Strategies\LogStrategyBase.cs" />
     <Compile Include="ServiceEvent.cs" />
     <Compile Include="ServiceLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="WindowsEventLogStrategy.cs" />
+    <Compile Include="Strategies\WindowsEventLogStrategy.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

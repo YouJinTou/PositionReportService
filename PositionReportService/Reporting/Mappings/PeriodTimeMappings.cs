@@ -2,7 +2,10 @@
 
 namespace Reporting
 {
-    internal class PeriodTimeTradeMappings
+    /// <summary>
+    /// Contains period-time mappings for the different types of trades.
+    /// </summary>
+    internal class PeriodTimeMappings
     {
         private static readonly IDictionary<int, string> PowerTradeMappings = new Dictionary<int, string>
         {
@@ -32,7 +35,12 @@ namespace Reporting
             { 24, "22:00" }
         };
 
-        public static IDictionary<int, string> GetMappings()
+        /// <summary>
+        /// Determines the type of mappings to return depending on the value of the "Trade" environment variable
+        /// set while instantiating the TradesFetcher class.
+        /// </summary>
+        /// <returns>A period-time mapping.</returns>
+        public static IDictionary<int, string> GetMapping()
         {
             switch (Utils.GetTradeType())
             {

@@ -5,6 +5,9 @@ using System.Linq;
     
 namespace Reporting
 {
+    /// <summary>
+    /// An adapter for the PowerTrade trade type.
+    /// </summary>
     internal class PowerTradeAdapter : ITrade
     {
         private PowerTrade powerTrade;

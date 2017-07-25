@@ -23,6 +23,10 @@ namespace WindowsService
 
         protected override void OnStart(string[] args)
         {
+            //Thread.Sleep(15000); // For attaching purposes
+
+            ServiceLogger.LogEvent(ServiceEvent.ServiceInitialized, new WindowsEventLogStrategy());
+
             this.cancellationTokenSource = new CancellationTokenSource();
             this.createReportTask = Task.Run(() => this.CreateReport(this.cancellationTokenSource.Token));
         }
@@ -33,22 +37,28 @@ namespace WindowsService
 
             try
             {
+                ServiceLogger.LogEvent(ServiceEvent.WaitingBeforeStop, new WindowsEventLogStrategy());
+
+                this.RequestAdditionalTime(TimeSpan.FromSeconds(60).Milliseconds);
+
                 this.createReportTask.Wait();
             }
-            catch (Exception ex)
+            catch (AggregateException aex)
             {
-                ServiceLogger.LogEvent(ServiceEvent.StopFailed, new WindowsEventLogStrategy(), ex.Message);
+                ServiceLogger.LogEvent(ServiceEvent.StopExceptionThrown, new WindowsEventLogStrategy(), aex.Message);
             }
+
+            ServiceLogger.LogEvent(ServiceEvent.ServiceStopped, new WindowsEventLogStrategy());
         }
 
         private async Task CreateReport(CancellationToken token)
         {
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 await ReportCreator.CreateTradeVolumeReportAsync(
-                    DateTime.Now, 
-                    ConfigurationManager.TradeReportsPath, 
-                    ConfigurationManager.Service, 
+                    DateTime.Now,
+                    ConfigurationManager.TradeReportsPath,
+                    ConfigurationManager.Service,
                     ConfigurationManager.TradeType);
 
                 ServiceLogger.LogEvent(ServiceEvent.ReportCreatedSuccessfully, new WindowsEventLogStrategy());
@@ -60,8 +70,8 @@ namespace WindowsService
                 if (this.IntervalChanged(newInterval))
                 {
                     ServiceLogger.LogEvent(
-                        ServiceEvent.GenerationIntervalChanged, 
-                        new WindowsEventLogStrategy(), 
+                        ServiceEvent.GenerationIntervalChanged,
+                        new WindowsEventLogStrategy(),
                         string.Format("Interval changed to: {0}", newInterval));
                 }
 
@@ -69,6 +79,8 @@ namespace WindowsService
 
                 await Task.Delay(newInterval, token);
             }
+
+            ServiceLogger.LogEvent(ServiceEvent.ServiceStopped, new WindowsEventLogStrategy());
         }
 
         private bool IntervalChanged(TimeSpan newInterval)

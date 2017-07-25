@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ReportingTest
+namespace Testing
 {
     internal class DummyTrade : ITrade
     {

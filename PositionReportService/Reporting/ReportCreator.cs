@@ -7,8 +7,19 @@ using System.Threading.Tasks;
 
 namespace Reporting
 {
+    /// <summary>
+    /// Exposes methods to create trade volume reports.
+    /// </summary>
     public class ReportCreator
     {
+        /// <summary>
+        /// Creates a .csv report with two columns -- Local Time and Volume.
+        /// </summary>
+        /// <param name="date">The date of the report.</param>
+        /// <param name="savePath">Where to save the report. Defaults to the executing assembly's base directory.</param>
+        /// <param name="service">The type of API service to use.</param>
+        /// <param name="tradeType">The type of trade.</param>
+        /// <returns></returns>
         public static async Task CreateTradeVolumeReportAsync(DateTime date, string savePath, IPowerService service, TradeType tradeType)
         {
             TradesFetcher fetcher = new TradesFetcher(service, tradeType);

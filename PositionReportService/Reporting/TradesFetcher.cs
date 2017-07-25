@@ -14,6 +14,11 @@ namespace Reporting
         private IPowerService service;
         private TradeType trade;
 
+        /// <summary>
+        /// Instantiate to be able to get the trades required.
+        /// </summary>
+        /// <param name="service">The type of API service.</param>
+        /// <param name="trade">The type of trade.</param>
         public TradesFetcher(IPowerService service, TradeType trade)
         {
             this.service = service;
@@ -23,10 +28,10 @@ namespace Reporting
         }
 
         /// <summary>
-        /// Gets all trade volumes for a given period.
+        /// Gets all trade volumes for a given date.
         /// </summary>
         /// <param name="date">The current time wherever the service is running from. It will be converted to GMT.</param>
-        /// <returns>The trade position volumes for that period, usually 24 per position.</returns>
+        /// <returns>The trade volumes for that period, usually 24 per position.</returns>
         public async Task<IEnumerable<ITrade>> GetTradesAsync(DateTime date)
         {
             IEnumerable<ITrade> trades = null;
@@ -38,16 +43,17 @@ namespace Reporting
                 try
                 {
                     trades = await this.GetAdaptedTradesAsync(date);
+                    failCounter = 0;
                 }
                 catch (PowerServiceException)
                 {
                     failCounter++;
 
-                    ServiceLogger.LogEvent(ServiceEvent.ApiCallFailed, new ConsoleLogStrategy());
+                    ServiceLogger.LogEvent(ServiceEvent.ApiCallFailed, new WindowsEventLogStrategy());
 
                     if (failCounter >= maxFailuresAllowed)
                     {
-                        ServiceLogger.LogEvent(ServiceEvent.MaxApiCallsExceeded, new ConsoleLogStrategy());
+                        ServiceLogger.LogEvent(ServiceEvent.MaxApiCallsExceeded, new WindowsEventLogStrategy());
 
                         failCounter = 0;
                     }
@@ -56,7 +62,7 @@ namespace Reporting
                 }
                 catch (ArgumentException ae)
                 {
-                    ServiceLogger.LogEvent(ServiceEvent.InvalidTradeTypeReceived, new ConsoleLogStrategy(), ae.Message);
+                    ServiceLogger.LogEvent(ServiceEvent.InvalidTradeTypeReceived, new WindowsEventLogStrategy(), ae.Message);
                 }
             }
 

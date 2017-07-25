@@ -6,8 +6,8 @@
     <ProjectGuid>{75AAC838-BDB7-4A75-BDB7-BDB55EA1F8BD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ReportingTest</RootNamespace>
-    <AssemblyName>ReportingTest</AssemblyName>
+    <RootNamespace>Testing</RootNamespace>
+    <AssemblyName>Testing</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -54,12 +54,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CalculationTests.cs" />
-    <Compile Include="DummyTrade.cs" />
-    <Compile Include="ReportCreationTests.cs" />
+    <Compile Include="ConfigurationTests.cs" />
+    <Compile Include="Reporting\CalculationTests.cs" />
+    <Compile Include="HelperClasses\DummyTrade.cs" />
+    <Compile Include="Reporting\ReportCreationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Configuration\Configuration.csproj">
+      <Project>{c12ebfc5-ddc4-4465-8940-2f5ab39f8d34}</Project>
+      <Name>Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reporting\Reporting.csproj">
       <Project>{0464C913-A45C-4605-8E9C-B35F612FB86E}</Project>
       <Name>Reporting</Name>

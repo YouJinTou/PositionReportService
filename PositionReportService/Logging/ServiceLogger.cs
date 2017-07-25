@@ -1,16 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logging
+﻿namespace Logging
 {
+    /// <summary>
+    /// Exposes methods for logging report events.
+    /// </summary>
     public static class ServiceLogger
     {
-        public static void LogEvent(ServiceEvent serviceEvent, ILogStrategy logMethod, string message = null)
+        /// <summary>
+        /// Logs a given event. A logging strategy can be chosen.
+        /// </summary>
+        /// <param name="serviceEvent">The service event.</param>
+        /// <param name="logStrategy">
+        /// The strategy to be used. Currently:
+        /// <para>ConsoleLogStrategy</para>
+        /// <para>WindowsEventLogStrategy</para>
+        /// </param>
+        /// <param name="message">The message to pass along.</param>
+        public static void LogEvent(ServiceEvent serviceEvent, ILogStrategy logStrategy, string message = null)
         {
-            logMethod.LogEvent(serviceEvent, message);
+            logStrategy.LogEvent(serviceEvent, message);
         }
     }
 }

@@ -5,11 +5,19 @@ using System.Linq;
 
 namespace Reporting
 {
+    /// <summary>
+    /// Exposes methods to calculate trade volumes.
+    /// </summary>
     internal class TradeVolumeCalculator
     {
+        /// <summary>
+        /// Calculates aggregate trade volumes.
+        /// </summary>
+        /// <param name="trades">A collection of trades.</param>
+        /// <returns>Period-volume mappings based on the type of trade.</returns>
         public static IDictionary<string, double> CalculateAggregateVolumes(IEnumerable<ITrade> trades)
         {
-            IDictionary<int, string> mappings = PeriodTimeTradeMappings.GetMappings();
+            IDictionary<int, string> mappings = PeriodTimeMappings.GetMapping();
             IDictionary<int, double> periodVolumes = mappings.ToDictionary(kvp => kvp.Key, kvp => 0.0);
             IDictionary<string, double> result = new Dictionary<string, double>();
 
@@ -27,7 +35,7 @@ namespace Reporting
             }
             catch (Exception ex)
             {
-                ServiceLogger.LogEvent(ServiceEvent.VolumeCalculationFailed, new ConsoleLogStrategy(), ex.Message);
+                ServiceLogger.LogEvent(ServiceEvent.VolumeCalculationFailed, new WindowsEventLogStrategy(), ex.Message);
             }
 
             return result;

@@ -3,7 +3,7 @@ using Reporting;
 using System;
 using System.Collections.Generic;
 
-namespace ReportingTest
+namespace Testing
 {
     [TestClass]
     public class CalculationTests
@@ -26,7 +26,7 @@ namespace ReportingTest
             Environment.SetEnvironmentVariable("Trade", "PowerTrade");
 
             var aggregateVolumes = TradeVolumeCalculator.CalculateAggregateVolumes(this.DummyTrades);
-            var mappings = PeriodTimeTradeMappings.GetMappings();
+            var mappings = PeriodTimeMappings.GetMapping();
 
             for (int period = 1; period <= 24; period++)
             {
