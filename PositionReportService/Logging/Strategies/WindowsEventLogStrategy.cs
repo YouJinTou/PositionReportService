@@ -35,9 +35,8 @@ namespace Logging
         internal override void OnApiCallFailed()
         {
             this.eventLog.WriteEntry(
-                string.Format("{0} -- Call to service API failed. {2}",
+                string.Format("{0} -- Call to service API failed. {1}",
                 Utils.GetCurrentGmtDateFormatted(),
-                base.serviceEvent.ToString(),
                 base.message));
         }
 
