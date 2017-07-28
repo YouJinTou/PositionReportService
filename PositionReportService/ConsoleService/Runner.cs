@@ -25,14 +25,13 @@ namespace ConsoleService
 
         private static async Task CreateReport()
         {
+            ITradesFetcher tradesFetcher = new TradesFetcher(ConfigurationManager.Service, ConfigurationManager.TradeType, logger);
+            ITradeVolumeCalculator volumeCalculator = new TradeVolumeCalculator(logger);
+            IReportCreator reportCreator = new ReportCreator(tradesFetcher, volumeCalculator);
+
             while (true)
             {
-                await ReportCreator.CreateTradeVolumeReportAsync(
-                    DateTime.Now, 
-                    ConfigurationManager.TradeReportsPath, 
-                    ConfigurationManager.Service, 
-                    ConfigurationManager.TradeType,
-                    logger);
+                await reportCreator.CreateTradeVolumeReportAsync(DateTime.Now, ConfigurationManager.TradeReportsPath);
 
                 logger.LogEvent(ServiceEvent.ReportCreatedSuccessfully);
 

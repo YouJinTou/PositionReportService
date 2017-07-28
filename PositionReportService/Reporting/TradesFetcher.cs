@@ -9,7 +9,7 @@ namespace Reporting
     /// <summary>
     /// Exposes methods to get trade data for a specific date.
     /// </summary>
-    internal class TradesFetcher
+    public class TradesFetcher : ITradesFetcher
     {
         private IPowerService service;
         private TradeType trade;

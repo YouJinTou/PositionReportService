@@ -1,6 +1,4 @@
-﻿using Logging;
-using Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -11,8 +9,22 @@ namespace Reporting
     /// <summary>
     /// Exposes methods to create trade volume reports.
     /// </summary>
-    public class ReportCreator
+    public class ReportCreator : IReportCreator
     {
+        private ITradesFetcher tradesFetcher;
+        private ITradeVolumeCalculator volumeCalculator;
+
+        /// <summary>
+        /// Instantiate to be able to create trade reports.
+        /// </summary>
+        /// <param name="tradesFetcher">An object that can get trades.</param>
+        /// <param name="volumeCalculator">An object that can calculate trade volumes.</param>
+        public ReportCreator(ITradesFetcher tradesFetcher, ITradeVolumeCalculator volumeCalculator)
+        {
+            this.tradesFetcher = tradesFetcher;
+            this.volumeCalculator = volumeCalculator;
+        }
+
         /// <summary>
         /// Creates a .csv report with two columns -- Local Time and Volume.
         /// </summary>
@@ -21,12 +33,10 @@ namespace Reporting
         /// <param name="service">The type of API service to use.</param>
         /// <param name="tradeType">The type of trade.</param>
         /// <returns></returns>
-        public static async Task CreateTradeVolumeReportAsync(DateTime date, string savePath, IPowerService service, TradeType tradeType, IServiceLogger logger)
+        public async Task CreateTradeVolumeReportAsync(DateTime date, string savePath)
         {
-            TradesFetcher fetcher = new TradesFetcher(service, tradeType, logger);
-            IEnumerable<ITrade> trades = await fetcher.GetTradesAsync(date);
-            TradeVolumeCalculator calculator = new TradeVolumeCalculator(logger);
-            IDictionary<string, double> aggregateVolumes = calculator.CalculateAggregateVolumes(trades);
+            IEnumerable<ITrade> trades = await this.tradesFetcher.GetTradesAsync(date);
+            IDictionary<string, double> aggregateVolumes = this.volumeCalculator.CalculateAggregateVolumes(trades);
             StringBuilder csv = new StringBuilder();
 
             csv.AppendLine("Local Time,Volume");

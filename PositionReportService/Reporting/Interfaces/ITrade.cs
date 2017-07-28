@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Reporting
 {
-    internal interface ITrade
+    public interface ITrade
     {
         DateTime Date { get; }
 

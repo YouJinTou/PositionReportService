@@ -45,9 +45,9 @@ namespace WindowsService
 
                 this.createReportTask.Wait();
             }
-            catch (AggregateException aex)
+            catch (AggregateException)
             {
-                this.logger.LogEvent(ServiceEvent.StopExceptionThrown, aex.Message);
+                this.logger.LogEvent(ServiceEvent.StopExceptionThrown, "Task stopped succesfully.");
             }
 
             this.logger.LogEvent(ServiceEvent.ServiceStopped);
@@ -55,15 +55,14 @@ namespace WindowsService
 
         private async Task CreateReport(CancellationToken token)
         {
+            ITradesFetcher tradesFetcher = new TradesFetcher(ConfigurationManager.Service, ConfigurationManager.TradeType, this.logger);
+            ITradeVolumeCalculator volumeCalculator = new TradeVolumeCalculator(this.logger);
+            IReportCreator reportCreator = new ReportCreator(tradesFetcher, volumeCalculator);
+
             while (!token.IsCancellationRequested)
             {
-                await ReportCreator.CreateTradeVolumeReportAsync(
-                    DateTime.Now,
-                    ConfigurationManager.TradeReportsPath,
-                    ConfigurationManager.Service,
-                    ConfigurationManager.TradeType,
-                    this.logger);
-
+                await reportCreator.CreateTradeVolumeReportAsync(DateTime.Now, ConfigurationManager.TradeReportsPath);
+               
                 this.logger.LogEvent(ServiceEvent.ReportCreatedSuccessfully);
 
                 ConfigurationManager.RefreshAppSettings();

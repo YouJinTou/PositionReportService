@@ -8,7 +8,7 @@ namespace Reporting
     /// <summary>
     /// Exposes methods to calculate trade volumes.
     /// </summary>
-    internal class TradeVolumeCalculator
+    public class TradeVolumeCalculator : ITradeVolumeCalculator
     {
         private IServiceLogger logger;
 

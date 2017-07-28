@@ -1,8 +1,8 @@
 ﻿using Configuration;
 using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Reporting;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,29 +13,34 @@ namespace Testing
     [TestClass]
     public class ReportCreationTests
     {
-        private List<ITrade> DummyTrades
-        {
-            get
-            {
-                return new List<ITrade>
-                {
-                    new DummyTrade(),
-                    new DummyTrade()
-                };
-            }
-        }
-
         [TestMethod]
         public async Task ReportCreator_Should_Save_Report()
         {
             Environment.SetEnvironmentVariable("Trade", "PowerTrade");
 
-            DateTime gmtTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
-            string reportName = "PowerPosition_" + gmtTime.ToString("yyyyMMdd_HHmm") + ".csv";
-            string testExePath = ConfigurationManager.TradeReportsPath;
-            string reportPath = Path.Combine(testExePath, reportName);
+            var gmtTime = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+            var reportName = "PowerPosition_" + gmtTime.ToString("yyyyMMdd_HHmm") + ".csv";
+            var testExePath = ConfigurationManager.TradeReportsPath;
+            var reportPath = Path.Combine(testExePath, reportName);
+            var mockFetcher = new Mock<ITradesFetcher>();            
+            var mockCalculator = new Mock<ITradeVolumeCalculator>();
+            var mockLogger = new Mock<IServiceLogger>();
 
-            await ReportCreator.CreateTradeVolumeReportAsync(DateTime.Now, testExePath, new PowerService(), TradeType.PowerTrade, new ServiceLogger(LogStrategy.Console));
+            mockFetcher
+                .Setup(f => f.GetTradesAsync(It.IsAny<DateTime>()))
+                .ReturnsAsync(() =>
+                new List<ITrade>
+                {
+                    new DummyTrade(),
+                    new DummyTrade()
+                });
+            mockCalculator
+                .Setup(c => c.CalculateAggregateVolumes(It.IsAny<IEnumerable<ITrade>>()))
+                .Returns(() => new Dictionary<string, double>());
+
+            var reportCreator = new ReportCreator(mockFetcher.Object, mockCalculator.Object);
+
+            await reportCreator.CreateTradeVolumeReportAsync(DateTime.Now, testExePath);
 
             if (!File.Exists(reportPath))
             {

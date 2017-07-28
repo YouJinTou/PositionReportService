@@ -45,7 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\ITrade.cs" />
+    <Compile Include="Interfaces\ITrade.cs" />
+    <Compile Include="Interfaces\IReportCreator.cs" />
+    <Compile Include="Interfaces\ITradesFetcher.cs" />
+    <Compile Include="Interfaces\ITradeVolumeCalculator.cs" />
     <Compile Include="Mappings\PeriodTimeMappings.cs" />
     <Compile Include="Adapters\PowerTradeAdapter.cs" />
     <Compile Include="ReportCreator.cs" />
